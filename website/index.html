@@ -172,6 +172,16 @@
     }
     .product-card .add-btn:hover { background: linear-gradient(135deg, #f0b5b5, #e8a0a8); color: #fff; border-color: transparent; transform: scale(1.02); }
 
+    /* Category tabs */
+    .cat-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .cat-tab {
+      padding: 0.5rem 1.5rem; border-radius: 50px; border: 1px solid rgba(61,44,46,0.08);
+      background: transparent; color: #7a6a6c; cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s;
+    }
+    .cat-tab:hover { border-color: #f0b5b5; color: #3d2c2e; }
+    .cat-tab.active { background: linear-gradient(135deg, #f0b5b5, #e8a0a8); color: #fff; border-color: transparent; }
+
     /* Cart Sidebar */
     .cart-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.2); z-index: 200;
@@ -352,6 +362,10 @@
   <section id="collection">
     <h2 class="section-title">Our Collection</h2>
     <p class="section-sub">Curated for every occasion</p>
+    <div class="cat-tabs">
+      <button class="cat-tab active" data-cat="all">Italian Bracelets and Charms</button>
+      <button class="cat-tab" data-cat="charm-necklace">Charm Necklaces</button>
+    </div>
     <div class="collection-grid" id="productGrid"></div>
   </section>
 
@@ -418,21 +432,23 @@
       </div>
       <div class="form-group">
         <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" required placeholder="+1 (212) 555-0192">
+        <input type="tel" id="phone" required placeholder="+212 6XX-XXXXXX">
       </div>
       <div class="form-group">
         <label for="address">Address</label>
-        <input type="text" id="address" required placeholder="123 Pearl St, Apt 4B">
+        <input type="text" id="address" required placeholder="123 Rue, Appt 4B">
       </div>
       <div class="form-group">
         <label for="city">City</label>
-        <input type="text" id="city" required placeholder="New York">
+        <input type="text" id="city" required placeholder="Casablanca" list="cities" oninput="calcShipping()">
+        <datalist id="cities"></datalist>
       </div>
-      <div class="form-total">
-        <span>Total</span>
-        <span id="checkoutTotal">$0</span>
+      <div class="form-total" style="flex-direction:column;gap:0.5rem">
+        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span id="checkoutSubtotal">0 dh</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Shipping</span><span id="checkoutShipping">—</span></div>
+        <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(61,44,46,0.06);padding-top:0.5rem;font-weight:600"><span>Total</span><span id="checkoutTotal">0 dh</span></div>
       </div>
-      <button type="submit" class="place-order-btn">Place Order</button>
+      <button type="submit" class="place-order-btn" id="placeOrderBtn" disabled>Select a city</button>
     </form>
   </div>
 
@@ -442,68 +458,91 @@
   <script>
     const products = [
       // 20 dh
-      { id: 1, name: 'Artsy Charm', price: 20, img: 'products/artsy charm.png', desc: 'Handcrafted charm' },
-      { id: 2, name: 'Black & White Charm', price: 20, img: 'products/black and white charm.png', desc: 'Handcrafted charm' },
-      { id: 3, name: 'Blue Butterfly Charm', price: 20, img: 'products/blue butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 4, name: 'Blue Flower Charm', price: 20, img: 'products/blue flower charm.png', desc: 'Handcrafted charm' },
-      { id: 5, name: 'Blue Sky Tulip Charm', price: 20, img: 'products/blue sky tulip charm.png', desc: 'Handcrafted charm' },
-      { id: 6, name: 'Double Butterfly Charm', price: 35, img: 'products/double butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 7, name: 'Drama Queen Charm', price: 20, img: 'products/drama queen charm.png', desc: 'Handcrafted charm' },
-      { id: 8, name: 'Gold Butterfly Charm', price: 20, img: 'products/gold butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 9, name: 'Little Tulip Charm', price: 20, img: 'products/little tulip charm.png', desc: 'Handcrafted charm' },
-      { id: 10, name: 'Pink Duck Charm', price: 20, img: 'products/pink duck charm.png', desc: 'Handcrafted charm' },
-      { id: 11, name: 'Pink Glamour Charm', price: 20, img: 'products/pink glamour charm.png', desc: 'Handcrafted charm' },
-      { id: 12, name: 'Polka Dots Charm', price: 20, img: 'products/polka dots charm.png', desc: 'Handcrafted charm' },
-      { id: 13, name: 'Silver Paw Charm', price: 20, img: 'products/silver paw charm.png', desc: 'Handcrafted charm' },
-      { id: 14, name: 'Sunflower Charm', price: 20, img: 'products/sunflower charm.png', desc: 'Handcrafted charm' },
-      { id: 15, name: 'White Puppy Charm', price: 20, img: 'products/white puppy charm.png', desc: 'Handcrafted charm' },
-      // 25 dh
-      { id: 16, name: 'Blue Bow Charm', price: 25, img: '25/blue bow charm.png', desc: 'Handcrafted charm' },
-      { id: 17, name: 'Blue Turtle Charm', price: 25, img: '25/blue turtle charm.png', desc: 'Handcrafted charm' },
-      { id: 18, name: 'Colorful Heart Charm', price: 25, img: '25/colorful heart charm.png', desc: 'Handcrafted charm' },
-      { id: 19, name: 'Conver', price: 25, img: '25/conver.png', desc: 'Handcrafted charm' },
-      { id: 20, name: 'Fish Charm', price: 25, img: '25/fish charm.png', desc: 'Handcrafted charm' },
-      { id: 21, name: 'Long Cat Charm', price: 25, img: '25/long cat charm.png', desc: 'Handcrafted charm' },
-      { id: 22, name: 'Long Heart Charm', price: 25, img: '25/long heart charm.png', desc: 'Handcrafted charm' },
-      { id: 23, name: 'Pearl Charm', price: 25, img: '25/pearl charm.png', desc: 'Handcrafted charm' },
-      { id: 24, name: 'Rose Charm', price: 25, img: '25/rose charm.png', desc: 'Handcrafted charm' },
-      { id: 25, name: 'Sea Horse Charm', price: 25, img: '25/sea horse charm.png', desc: 'Handcrafted charm' },
-      { id: 26, name: 'Sea Star Charm', price: 25, img: '25/sea star charm.png', desc: 'Handcrafted charm' },
-      { id: 27, name: 'Shell Silver Charm', price: 25, img: '25/shell silver charm.png', desc: 'Handcrafted charm' },
-      { id: 28, name: 'Star Double Charm', price: 35, img: '25/star double charm.png', desc: 'Handcrafted charm' },
-      { id: 29, name: 'Teddy Bear Charm', price: 25, img: '25/teddy bear charm.png', desc: 'Handcrafted charm' },
-      { id: 30, name: 'Tulip Charm', price: 25, img: '25/tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 1, name: 'Artsy Charm', price: 20, cat: 'charm', img: 'products/artsy charm.png', desc: 'Handcrafted charm' },
+      { id: 2, name: 'Black & White Charm', price: 20, cat: 'charm', img: 'products/black and white charm.png', desc: 'Handcrafted charm' },
+      { id: 3, name: 'Blue Butterfly Charm', price: 20, cat: 'charm', img: 'products/blue butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 4, name: 'Blue Flower Charm', price: 20, cat: 'charm', img: 'products/blue flower charm.png', desc: 'Handcrafted charm' },
+      { id: 5, name: 'Blue Sky Tulip Charm', price: 20, cat: 'charm', img: 'products/blue sky tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 6, name: 'Double Butterfly Charm', price: 35, cat: 'charm', img: 'products/double butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 7, name: 'Drama Queen Charm', price: 20, cat: 'charm', img: 'products/drama queen charm.png', desc: 'Handcrafted charm' },
+      { id: 8, name: 'Gold Butterfly Charm', price: 20, cat: 'charm', img: 'products/gold butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 9, name: 'Little Tulip Charm', price: 20, cat: 'charm', img: 'products/little tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 10, name: 'Pink Duck Charm', price: 20, cat: 'charm', img: 'products/pink duck charm.png', desc: 'Handcrafted charm' },
+      { id: 11, name: 'Pink Glamour Charm', price: 20, cat: 'charm', img: 'products/pink glamour charm.png', desc: 'Handcrafted charm' },
+      { id: 12, name: 'Polka Dots Charm', price: 20, cat: 'charm', img: 'products/polka dots charm.png', desc: 'Handcrafted charm' },
+      { id: 13, name: 'Silver Paw Charm', price: 20, cat: 'charm', img: 'products/silver paw charm.png', desc: 'Handcrafted charm' },
+      { id: 14, name: 'Sunflower Charm', price: 20, cat: 'charm', img: 'products/sunflower charm.png', desc: 'Handcrafted charm' },
+      { id: 15, name: 'White Puppy Charm', price: 20, cat: 'charm', img: 'products/white puppy charm.png', desc: 'Handcrafted charm' },
+      // 25 dh charms
+      { id: 16, name: 'Blue Bow Charm', price: 25, cat: 'charm', img: '25/blue bow charm.png', desc: 'Handcrafted charm' },
+      { id: 17, name: 'Blue Turtle Charm', price: 25, cat: 'charm', img: '25/blue turtle charm.png', desc: 'Handcrafted charm' },
+      { id: 18, name: 'Colorful Heart Charm', price: 25, cat: 'charm', img: '25/colorful heart charm.png', desc: 'Handcrafted charm' },
+      { id: 19, name: 'Conver', price: 25, cat: 'charm', img: '25/conver.png', desc: 'Handcrafted charm' },
+      { id: 20, name: 'Fish Charm', price: 25, cat: 'charm', img: '25/fish charm.png', desc: 'Handcrafted charm' },
+      { id: 21, name: 'Long Cat Charm', price: 25, cat: 'charm', img: '25/long cat charm.png', desc: 'Handcrafted charm' },
+      { id: 22, name: 'Long Heart Charm', price: 25, cat: 'charm', img: '25/long heart charm.png', desc: 'Handcrafted charm' },
+      { id: 23, name: 'Pearl Charm', price: 25, cat: 'charm', img: '25/pearl charm.png', desc: 'Handcrafted charm' },
+      { id: 24, name: 'Rose Charm', price: 25, cat: 'charm', img: '25/rose charm.png', desc: 'Handcrafted charm' },
+      { id: 25, name: 'Sea Horse Charm', price: 25, cat: 'charm', img: '25/sea horse charm.png', desc: 'Handcrafted charm' },
+      { id: 26, name: 'Sea Star Charm', price: 25, cat: 'charm', img: '25/sea star charm.png', desc: 'Handcrafted charm' },
+      { id: 27, name: 'Shell Silver Charm', price: 25, cat: 'charm', img: '25/shell silver charm.png', desc: 'Handcrafted charm' },
+      { id: 28, name: 'Star Double Charm', price: 35, cat: 'charm', img: '25/star double charm.png', desc: 'Handcrafted charm' },
+      { id: 29, name: 'Teddy Bear Charm', price: 25, cat: 'charm', img: '25/teddy bear charm.png', desc: 'Handcrafted charm' },
+      { id: 30, name: 'Tulip Charm', price: 25, cat: 'charm', img: '25/tulip charm.png', desc: 'Handcrafted charm' },
       // 30 dh
-      { id: 31, name: 'White Double Charm', price: 30, img: '30/white double charm.png', desc: 'Handcrafted charm' },
+      { id: 31, name: 'White Double Charm', price: 30, cat: 'charm', img: '30/white double charm.png', desc: 'Handcrafted charm' },
       // Little 20 dh
-      { id: 32, name: 'Cherry Charm', price: 20, img: 'little/cherry charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 33, name: 'Evil Eye Charm', price: 20, img: 'little/evil eye charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 34, name: 'Jelly Fish Charm', price: 20, img: 'little/jelly fish charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 35, name: 'Long Flower Charm', price: 28, img: 'little/long flower charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 36, name: 'Purple Flower Charm', price: 20, img: 'little/purple flower charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 37, name: 'Silver Blue Charm', price: 20, img: 'little/silver blue charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 38, name: 'Sun Charm', price: 20, img: 'little/sun charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 39, name: 'Sylver Charm', price: 20, img: 'little/sylver charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 40, name: 'Yin Yang Charm', price: 20, img: 'little/yin yang charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 32, name: 'Cherry Charm', price: 20, cat: 'charm', img: 'little/cherry charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 33, name: 'Evil Eye Charm', price: 20, cat: 'charm', img: 'little/evil eye charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 34, name: 'Jelly Fish Charm', price: 20, cat: 'charm', img: 'little/jelly fish charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 35, name: 'Long Flower Charm', price: 28, cat: 'charm', img: 'little/long flower charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 36, name: 'Purple Flower Charm', price: 20, cat: 'charm', img: 'little/purple flower charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 37, name: 'Silver Blue Charm', price: 20, cat: 'charm', img: 'little/silver blue charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 38, name: 'Sun Charm', price: 20, cat: 'charm', img: 'little/sun charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 39, name: 'Sylver Charm', price: 20, cat: 'charm', img: 'little/sylver charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 40, name: 'Yin Yang Charm', price: 20, cat: 'charm', img: 'little/yin yang charm.jpeg', desc: 'Handcrafted charm' },
       // Bracelet
-      { id: 41, name: 'Italian Bracelet', price: 75, img: 'bracelet/italian bracelet.jpeg', desc: 'Handcrafted bracelet' },
+      { id: 41, name: 'Italian Bracelet', price: 75, cat: 'bracelet', img: 'bracelet/italian bracelet.jpeg', desc: 'Handcrafted bracelet' },
     ];
 
     let cart = [];
 
+    let currentCat = 'all';
     const grid = document.getElementById('productGrid');
-    products.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product-card reveal';
-      card.innerHTML = `
-        <div class="img"><img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"></div>
-        <h3>${p.name}</h3>
-        <div class="price">${p.price} dh</div>
-        <div class="desc">${p.desc}</div>
-        <button class="add-btn" data-id="${p.id}">Add to Cart</button>
-      `;
-      grid.appendChild(card);
+
+    function renderProducts(cat) {
+      const filtered = cat === 'all' ? products : products.filter(p => p.cat === cat);
+      grid.innerHTML = '';
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;color:#b5a7a9;grid-column:1/-1;padding:3rem 0">No products yet. Coming soon!</p>';
+        return;
+      }
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card reveal';
+        card.innerHTML = `
+          <div class="img"><img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"></div>
+          <h3>${p.name}</h3>
+          <div class="price">${p.price} dh</div>
+          <div class="desc">${p.desc}</div>
+          <button class="add-btn" data-id="${p.id}">Add to Cart</button>
+        `;
+        grid.appendChild(card);
+      });
+      // Observe new cards for scroll animation
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCat = tab.dataset.cat;
+        renderProducts(currentCat);
+      });
     });
+
+    renderProducts('all');
 
     // Cart
     const sidebar = document.getElementById('cartSidebar');
@@ -594,18 +633,102 @@
       if (btn) addToCart(Number(btn.dataset.id));
     });
 
+    // Shipping
+    const freeCities = ['kenitra','sidi taibi','sidi yahya el gharb','mechra bel ksiri','sidi slimane','sidi kacem'];
+    function getShipping(city) {
+      const c = city.toLowerCase().trim();
+      if (freeCities.includes(c)) return 0;
+      return 45;
+    }
+
+    // Populate city list
+    const allCities = [
+      'Marrakech','Meknes','Tnine Mhaya','Ain Taoujdate','Sabaa Aiyoun','Boufakrane','El Hajeb','Bouderbala','Agourai','Boujdour',
+      'Tetouan','Martil','M Diq','Fnideq','Errachidia','Oujda','Nador','Selouane','Al Aaroui','Zaio','Driouch','Khouribga',
+      'Oued Zem','Boulanouar','Boujniba','Bir Mezoui','Khemisset','Tiflet','Mohammedia','Ain Harrouda','Dakhla','Kenitra',
+      'Sidi Taibi','Sidi Yahya El Gharb','Mechra Bel Ksiri','Sidi Sliman','Sidi Kacem','Tan Tan','Guelmim','Bouizakarne',
+      'Sidi Ifni','Rabat','Sale','Sale El Jadida','Temara','Tamesna','Skhirat','Ouarzazat','Ait Zineb','Tajda','Timdline',
+      'Tifoultoute','Ifran','Azrou','Agadir','Inzegane','Dcheira','Ait Meloul','Sidi Bibi','Taghazoute','Fes',
+      'Oulad Ettayeb','Essmara','Berrchid','Deroua','Nouaceur','Had Soualem','Al Hoceima','Ajdir','Ait Kamra','Imzouren',
+      'Youssoufia','Essaouira','Ounagha','Had Draa','Mejji','Ghazoua','Tanger','Mrirt','Khenifra','Ben Guerir',
+      'Taroudannt','Oulad Teima','Ait Laaza','Aoulouz','Taliouine','Sebt El Guerdane','Berkane','Saidia','Ras El Ma',
+      'Bni Drar','Ahfir','Aklim','Zeghanghane','Farkhana','Taza','Guercif','Tiznit','Safi','Had Hrara','Sebt Gzoula',
+      'Larache','Ksar El Kebir','Chefchaouen','Sidi Bernoussi','Casablanca','Bouskoura','Dar Bouaza','Mediouna',
+      'El Kelaa Des Sraghna','El Jadida','Azemmour','Sidi Bouzid','Moulay Abdellah','Oualidia','Sidi Bennour',
+      'Beni Ansar','Laayoune','Beni Mellal','Fquih Ben Salah','Sebt Oulad Nemma','Afourer','Ouled Yaiche','El Ksiba',
+      'Ain Aouda','Tamansourt','Benslimane','Kasbah Tadla','Chemaia','Ourika','Tahannaout','Ait Ourir','Oudaya',
+      'Chichaoua','Assilah','Bouznika','Sefrou','Taourirt','Chouiter','Sidi Allal el Bahraoui','Ouazzane','Harhoura',
+      'Laattaouia','Rissani','Arfoud','Merzouga','Taddart','Bni Bouayach','Azilal','Ouaouizeght','Bejaad','Tinghir',
+      'Boumalne Dades','Kalaat MGouna','Alnif','Taounate','Awrir','Ait amira','Belfaa','Anza','BAB TAZA','Bab berred',
+      'Midelt','Laayoun Cherqia','Zagora','Tamegroute','Tagomite','Mhamid Lghezlane','Agdz','Nkob','Tazzarine','Errich',
+      'Missour','Boumia','Tinjdad','Gulmima','Sidi Bouknadel','IMINTANOUTE','DEMNATE','Ouad Laou','Cabo Negro',
+      'Khmiss Zemamera','Sidi Smail','Oulad Fraj','Sidi Rehal','Assa','Boudnib','Ben Ahmed','Sidi Bou Othmane',
+      'Souk Elarbaa Du Gharb','AZLA','MARINA','AIN ATIG','MERS LKHIR','SIDI YAHYA ZAIR','JORF SFER','BIR JDID',
+      'MIDAR','BENTAYAB','EL GARA','SETTAT','BNI OUKIL','Jemaat Shaim','BENI KLA','TIKIWINE','TIZI OUSLI','TAHLA',
+      'EL CAP','Al Rahma','BOUKIDAN','SKHOUR RHAMNA','IMOUZAR KANDAR','OUED AMLIL','Biougra','Mensouria','Tighsalin',
+      'Jerada','laayoune-oujda','kKerrouchen','Tit Mellil','Oulad berhili','Tata','moulay yacoub','Ait ishak',
+      'ighrem laalam','SIDI JABER','Bouarfa','Figuig','Ksar sghir','Oulad ayad','Dar oulad zidoune','zaouiat cheikh',
+      'laouamra','zoumi','Aglmous','Ait Addou','Houara','Mireleft','Tilmia','Ait Marghade','Taadadati','Ait Karmas',
+      'Bab Attoutchy','Toumliwana','Tiidrinas','Ait Hanik','Illigha','Tadaout','Tanout','Battou','Takchawa','Lqliaa',
+      'Madagh','Regada','Jaadar','Bouarg','ARkman','Teztoutin','Dar El kebdani','Taouima','Ihdaden','Crona',
+      'Ouled Settout','Boudinar','Anwal','Amzarou','Mariouari','Bouhlou','Aknoul','Bourd','Sidi Ali Bourakba',
+      'Ain Hamra','Hed Ouled Zbir','Kaldman','Issagen','Targist','Tala youssef','Souani','Hicham Azghar','Debdou',
+      'Tendrara','Bergem','Cafe Maure','LAMRIS','Naima','Moulay Bousselham','Khenichet','Lalla Mimouna',
+      'Ain Beni Mathar','Tamaris','Outat El Haj','El Haj Kaddour','Oued Jdida','El Haouzia','Douar Tikni',
+      'Mazagan beach','SIDI ALI','Msawer Rasso','Tnin Chtouka','Oulad Amrane','Sidi Abed','Ouled Ghanem',
+      'Oulad Si Bouhya','Riouni','Laaounate','Hed laaounate','Beni Hilal','Jemaat Metal','Sebt El Maarif',
+      'Touilaate','Tnine El Ghiate','Dar Si Aissa','Souiria','El Beddouza','Laakarta','Tamelalt','El Bazzaza',
+      'Ouled Said El Oued','Oulad Youssef','Oulad Smail','Ait Rbaa','Ait Ali','Adouz','Tagzert','Foum El-Ansar',
+      'Tanougha','Oulad Mbarek','Oulad Moussa','Laayayta - Ouled Gnaou','Hed Bradia','Oulad Ali','Oulad Driss',
+      'El Khelfia','Had Boumoussa','Timoulilte','Foum Oudi','Beni Ayat','El Kebab','Ouaoumana','Kef en Nsour',
+      'Hattane','Ouled Gouaouch','Tachrafat','Drarga','Tamraght','Massa','Houara - Agadir','Tafraoute','Aglou',
+      'El Maader El Kabir','Arbaa Sahel','Idaousmlal','Boulemane','Amzmiz','Lagouassem','SIDI ABDELLAH GHIAT',
+      'SIDI MOUSSA','AGHMAT','Ouahat Sidi Brahim','Belaaguid','Oulad Yahya','Douar Bouaazza','Souihla','SIDI ZOUIN',
+      'Douar Sultan','Moulay Brahim','Sidi Mokhtar','Mzoudia','Ouled Hassoune','Ajdir (taza)','Karia Be Mohammed',
+      'Skoura','Dkhissa','Moulay driss zerhoun','Ain Karma','JemÃ¢a El Houdrane','Ain Johra','Bhalil','Elmnzel',
+      'sidi allal tai'
+    ];
+    const datalist = document.getElementById('cities');
+    allCities.forEach(c => { const o = document.createElement('option'); o.value = c; datalist.appendChild(o); });
+
     // Checkout
     const checkoutOverlay = document.getElementById('checkoutOverlay');
     const checkoutModal = document.getElementById('checkoutModal');
     const checkoutForm = document.getElementById('checkoutForm');
     const checkoutTotal = document.getElementById('checkoutTotal');
+    const checkoutSubtotal = document.getElementById('checkoutSubtotal');
+    const checkoutShipping = document.getElementById('checkoutShipping');
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    const cityInput = document.getElementById('city');
+
+    function calcShipping() {
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const city = cityInput.value.trim().toLowerCase();
+      let shipping = null;
+      if (allCities.some(c => c.toLowerCase() === city)) {
+        shipping = getShipping(city);
+      }
+      if (shipping === null) {
+        checkoutSubtotal.textContent = subtotal.toLocaleString() + ' dh';
+        checkoutShipping.textContent = '—';
+        checkoutTotal.textContent = subtotal.toLocaleString() + ' dh';
+        placeOrderBtn.textContent = 'Select a valid city';
+        placeOrderBtn.disabled = true;
+      } else {
+        const total = subtotal + shipping;
+        checkoutSubtotal.textContent = subtotal.toLocaleString() + ' dh';
+        checkoutShipping.textContent = shipping === 0 ? 'Free' : shipping + ' dh';
+        checkoutTotal.textContent = total.toLocaleString() + ' dh';
+        placeOrderBtn.textContent = 'Place Order';
+        placeOrderBtn.disabled = false;
+      }
+    }
 
     function openCheckout() {
-      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-      checkoutTotal.textContent = total.toLocaleString() + ' dh';
       checkoutOverlay.classList.add('open');
       checkoutModal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      calcShipping();
     }
     function closeCheckout() {
       checkoutOverlay.classList.remove('open');
@@ -630,10 +753,16 @@
       const city = document.getElementById('city').value.trim();
       if (!firstName || !lastName || !phone || !address || !city) return;
 
+      const shipping = getShipping(city);
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const total = subtotal + shipping;
+
       const order = {
         firstName, lastName, phone, address, city,
         items: cart.map(i => `${i.name} x${i.qty} — ${(i.price * i.qty).toLocaleString()} dh`).join(', '),
-        total: `${cart.reduce((s, i) => s + i.price * i.qty, 0).toLocaleString()} dh`
+        subtotal: subtotal.toLocaleString() + ' dh',
+        shipping: shipping === 0 ? 'Free' : shipping + ' dh',
+        total: total.toLocaleString() + ' dh'
       };
 
       const formData = new FormData();
@@ -641,6 +770,8 @@
       formData.append('Phone', phone);
       formData.append('Address', `${address}, ${city}`);
       formData.append('Items', order.items);
+      formData.append('Subtotal', order.subtotal);
+      formData.append('Shipping', order.shipping);
       formData.append('Total', order.total);
       fetch('https://formspree.io/f/mdaryapl', { method: 'POST', body: formData, headers: { Accept: 'application/json' } }).catch(() => {});
 
