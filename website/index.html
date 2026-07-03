@@ -172,6 +172,60 @@
     }
     .product-card .add-btn:hover { background: linear-gradient(135deg, #f0b5b5, #e8a0a8); color: #fff; border-color: transparent; transform: scale(1.02); }
 
+    /* Category tabs */
+    .cat-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .cat-tab {
+      padding: 0.5rem 1.5rem; border-radius: 50px; border: 1px solid rgba(61,44,46,0.08);
+      background: transparent; color: #7a6a6c; cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s;
+    }
+    .cat-tab:hover { border-color: #f0b5b5; color: #3d2c2e; }
+    .cat-tab.active { background: linear-gradient(135deg, #f0b5b5, #e8a0a8); color: #fff; border-color: transparent; }
+
+    /* Bracelet Builder */
+    .builder { display: none; }
+    .builder.active { display: block; }
+    .builder-bracelet {
+      width: 100%; max-width: 550px; margin: 0 auto 2rem; position: relative; padding: 4rem 2rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.2rem;
+    }
+    .builder-bracelet::before {
+      content: ''; position: absolute; left: 5%; right: 5%; top: 50%; height: 3px;
+      background: linear-gradient(90deg, #d4af37, #f0b5b5, #d4af37); border-radius: 2px;
+      transform: translateY(-50%);
+    }
+    .builder-bracelet .slot { width: 64px; height: 64px; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.3s; position: relative; cursor: pointer; z-index: 1; border: 2px dashed rgba(61,44,46,0.15); border-radius: 8px; }
+    .builder-bracelet .slot.dragover { border-color: #f0b5b5; background: rgba(240,181,181,0.06); }
+    .builder-bracelet .slot img { max-width: 56px; max-height: 56px; object-fit: contain; }
+    .builder-bracelet .slot .remove {
+      position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+      background: #e57373; color: #fff; border-radius: 50%; font-size: 0.6rem;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      border: none; font-family: 'Inter', sans-serif; line-height: 1;
+    }
+    .builder-charms {
+      display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; padding: 1.5rem;
+      background: #fff; border-radius: 16px; border: 1px solid rgba(61,44,46,0.04);
+      max-width: 600px; margin: 0 auto;
+    }
+    .builder-charms .charm-item { cursor: grab; overflow: hidden; border-radius: 4px; transition: all 0.3s; display: inline-flex; padding: 4px; }
+    .builder-charms .charm-item:hover { transform: scale(1.08); }
+    .builder-charms .charm-item:active { cursor: grabbing; }
+    .builder-charms .charm-item img { max-width: 48px; max-height: 48px; object-fit: contain; }
+    .builder-footer {
+      display: flex; justify-content: center; align-items: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .builder-price { font-size: 1.2rem; font-weight: 500; }
+    .builder-price span { color: #f0b5b5; }
+    .builder-add-btn {
+      padding: 0.8rem 2rem; background: linear-gradient(135deg, #f0b5b5, #e8a0a8); color: #fff;
+      border: none; border-radius: 50px; font-size: 0.78rem; letter-spacing: 2.5px;
+      text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.3s; font-weight: 500;
+    }
+    .builder-add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,181,181,0.4); }
+    .builder-add-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
     /* Cart Sidebar */
     .cart-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.2); z-index: 200;
@@ -352,7 +406,30 @@
   <section id="collection">
     <h2 class="section-title">Our Collection</h2>
     <p class="section-sub">Curated for every occasion</p>
+    <div class="cat-tabs">
+      <button class="cat-tab active" data-cat="shop">Italian Bracelets and Charms</button>
+      <button class="cat-tab" data-cat="builder">Design Your Bracelet</button>
+    </div>
     <div class="collection-grid" id="productGrid"></div>
+
+    <!-- Bracelet Builder -->
+    <div class="builder" id="builderSection">
+      <div class="builder-bracelet" id="braceletCanvas">
+        <div class="slot" data-slot="0"></div>
+        <div class="slot" data-slot="1"></div>
+        <div class="slot" data-slot="2"></div>
+        <div class="slot" data-slot="3"></div>
+        <div class="slot" data-slot="4"></div>
+        <div class="slot" data-slot="5"></div>
+        <div class="slot" data-slot="6"></div>
+      </div>
+      <p style="text-align:center;color:#b5a7a9;font-size:0.8rem;margin-bottom:1.5rem">Drag charms onto the bracelet</p>
+      <div class="builder-charms" id="charmTray"></div>
+      <div class="builder-footer">
+        <div class="builder-price">Total: <span id="builderTotal">75 dh</span></div>
+        <button class="builder-add-btn" id="builderAddBtn" disabled>Add to Cart</button>
+      </div>
+    </div>
   </section>
 
   <!-- Contact -->
@@ -489,24 +566,152 @@
       { id: 40, name: 'Yin Yang Charm', price: 20, img: 'little/yin yang charm.jpeg', desc: 'Handcrafted charm' },
       // Bracelet
       { id: 41, name: 'Italian Bracelet', price: 75, img: 'bracelet/italian bracelet.jpeg', desc: 'Handcrafted bracelet' },
+      // Montre
+      { id: 42, name: 'Gold Charm Watch', price: 120, img: 'montre/gold charm watch.png', desc: 'Handcrafted watch' },
+      { id: 43, name: 'Silver Charm Watch', price: 120, img: 'montre/silver charm watch.png', desc: 'Handcrafted watch' },
     ];
 
     let cart = [];
 
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+
+    // Charm design products (for the builder)
+    const charmDesignFiles = [
+      'image-removebg-preview (6).png', 'image-removebg-preview (7).png', 'image-removebg-preview (10).png',
+      'image-removebg-preview (11).png', 'image-removebg-preview (12).png', 'image-removebg-preview (13).png',
+      'image-removebg-preview (14).png', 'image-removebg-preview (15).png', 'image-removebg-preview (16).png',
+      'image-removebg-preview (17).png', 'image-removebg-preview (18).png', 'image-removebg-preview (19).png',
+      'image-removebg-preview (20).png', 'image-removebg-preview (21).png', 'image-removebg-preview (22).png',
+      'image-removebg-preview (23).png', 'image-removebg-preview (24).png', 'image-removebg-preview (26).png',
+      'image-removebg-preview (27).png', 'image-removebg-preview (28).png', 'image-removebg-preview (29).png',
+      'image-removebg-preview (31).png', 'image-removebg-preview (32).png', 'image-removebg-preview (33).png',
+      'image-removebg-preview (34).png', 'image-removebg-preview (35).png',
+      'image-removebg-preview__27_-removebg-preview.png'
+    ];
+    const charmProducts = charmDesignFiles.map((f, i) => ({
+      id: 100 + i, name: `Charm ${i + 1}`, price: 20, img: `charm design/${f}`, desc: 'Design charm'
+    }));
+
     const grid = document.getElementById('productGrid');
-    products.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product-card reveal';
-      card.innerHTML = `
-        <div class="img"><img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"></div>
-        <h3>${p.name}</h3>
-        <div class="price">${p.price} dh</div>
-        <div class="desc">${p.desc}</div>
-        <button class="add-btn" data-id="${p.id}">Add to Cart</button>
-      `;
-      grid.appendChild(card);
-    });
+    function renderShop() {
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card reveal';
+        card.innerHTML = `
+          <div class="img"><img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"></div>
+          <h3>${p.name}</h3>
+          <div class="price">${p.price} dh</div>
+          <div class="desc">${p.desc}</div>
+          <button class="add-btn" data-id="${p.id}">Add to Cart</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    renderShop();
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Category tabs
+    const builderSection = document.getElementById('builderSection');
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const isBuilder = tab.dataset.cat === 'builder';
+        grid.style.display = isBuilder ? 'none' : '';
+        builderSection.classList.toggle('active', isBuilder);
+      });
+    });
+
+    // Bracelet Builder
+    const slots = document.querySelectorAll('.slot');
+    const charmTray = document.getElementById('charmTray');
+    const builderTotal = document.getElementById('builderTotal');
+    const builderAddBtn = document.getElementById('builderAddBtn');
+    const bracelet = { 0: null, 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+
+    // Populate charm tray with unique charms
+    const seen = new Set();
+    charmProducts.forEach(p => {
+      if (seen.has(p.name)) return;
+      seen.add(p.name);
+      const div = document.createElement('div');
+      div.className = 'charm-item';
+      div.draggable = true;
+      div.innerHTML = `<img src="${p.img}" alt="${p.name}" data-id="${p.id}" data-price="${p.price}" data-name="${p.name}">`;
+      div.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', JSON.stringify({ id: p.id, name: p.name, price: p.price, img: p.img }));
+      });
+      // Click to add to first empty slot
+      div.addEventListener('click', () => {
+        const emptySlot = Array.from(document.querySelectorAll('.slot')).find(s => !s.querySelector('img'));
+        if (!emptySlot) return;
+        const idx = emptySlot.dataset.slot;
+        bracelet[idx] = { id: p.id, name: p.name, price: p.price, img: p.img };
+        emptySlot.innerHTML = `<img src="${p.img}" alt="${p.name}"><button class="remove" data-slot="${idx}">&times;</button>`;
+        updateBuilder();
+      });
+      charmTray.appendChild(div);
+    });
+
+    slots.forEach(slot => {
+      slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('dragover'); });
+      slot.addEventListener('dragleave', () => slot.classList.remove('dragover'));
+      slot.addEventListener('drop', e => {
+        e.preventDefault();
+        slot.classList.remove('dragover');
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        const idx = slot.dataset.slot;
+        if (bracelet[idx]) return;
+        bracelet[idx] = data;
+        slot.innerHTML = `<img src="${data.img}" alt="${data.name}"><button class="remove" data-slot="${idx}">&times;</button>`;
+        updateBuilder();
+      });
+    });
+
+    // Remove charm from slot
+    document.addEventListener('click', e => {
+      if (e.target.classList.contains('remove')) {
+        const idx = e.target.dataset.slot;
+        bracelet[idx] = null;
+        const slot = document.querySelector(`.slot[data-slot="${idx}"]`);
+        slot.innerHTML = '';
+        updateBuilder();
+      }
+    });
+
+    function updateBuilder() {
+      const charmsTotal = Object.values(bracelet).reduce((sum, c) => sum + (c ? c.price : 0), 0);
+      const total = 75 + charmsTotal;
+      builderTotal.textContent = total + ' dh';
+      const count = Object.values(bracelet).filter(Boolean).length;
+      builderAddBtn.disabled = count === 0;
+    }
+
+    builderAddBtn.addEventListener('click', () => {
+      const charms = Object.values(bracelet).filter(Boolean);
+      if (charms.length === 0) return;
+      const names = charms.map(c => c.name).join(' + ');
+      const charmsTotal = charms.reduce((s, c) => s + c.price, 0);
+      const total = 75 + charmsTotal;
+      cart.push({
+        id: Date.now(),
+        name: `Custom Bracelet (${names})`,
+        price: total,
+        img: charms[0].img,
+        qty: 1,
+        desc: 'Custom designed bracelet'
+      });
+      updateCart();
+      showToast('Custom bracelet added to cart!');
+      // Reset builder
+      Object.keys(bracelet).forEach(k => { bracelet[k] = null; });
+      slots.forEach(s => s.innerHTML = '');
+      updateBuilder();
+    });
 
     // Cart
     const sidebar = document.getElementById('cartSidebar');
@@ -771,11 +976,6 @@
       html += '<br><button onclick="history.go()" style="padding:0.6rem 1.5rem;border:1px solid #f0b5b5;background:#fff;cursor:pointer;border-radius:8px">Back</button></div>';
       document.body.innerHTML = html;
     });
-
-    // Scroll reveal
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
 
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
