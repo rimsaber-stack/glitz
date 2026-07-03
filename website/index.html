@@ -444,51 +444,54 @@
   <script>
     const products = [
       // 20 dh
-      { id: 1, name: 'Artsy Charm', price: 20, cat: 'charm', img: 'products/artsy charm.png', desc: 'Handcrafted charm' },
-      { id: 2, name: 'Black & White Charm', price: 20, cat: 'charm', img: 'products/black and white charm.png', desc: 'Handcrafted charm' },
-      { id: 3, name: 'Blue Butterfly Charm', price: 20, cat: 'charm', img: 'products/blue butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 4, name: 'Blue Flower Charm', price: 20, cat: 'charm', img: 'products/blue flower charm.png', desc: 'Handcrafted charm' },
-      { id: 5, name: 'Blue Sky Tulip Charm', price: 20, cat: 'charm', img: 'products/blue sky tulip charm.png', desc: 'Handcrafted charm' },
-      { id: 6, name: 'Double Butterfly Charm', price: 35, cat: 'charm', img: 'products/double butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 7, name: 'Drama Queen Charm', price: 20, cat: 'charm', img: 'products/drama queen charm.png', desc: 'Handcrafted charm' },
-      { id: 8, name: 'Gold Butterfly Charm', price: 20, cat: 'charm', img: 'products/gold butterfly charm.png', desc: 'Handcrafted charm' },
-      { id: 9, name: 'Little Tulip Charm', price: 20, cat: 'charm', img: 'products/little tulip charm.png', desc: 'Handcrafted charm' },
-      { id: 10, name: 'Pink Duck Charm', price: 20, cat: 'charm', img: 'products/pink duck charm.png', desc: 'Handcrafted charm' },
-      { id: 11, name: 'Pink Glamour Charm', price: 20, cat: 'charm', img: 'products/pink glamour charm.png', desc: 'Handcrafted charm' },
-      { id: 12, name: 'Polka Dots Charm', price: 20, cat: 'charm', img: 'products/polka dots charm.png', desc: 'Handcrafted charm' },
-      { id: 13, name: 'Silver Paw Charm', price: 20, cat: 'charm', img: 'products/silver paw charm.png', desc: 'Handcrafted charm' },
-      { id: 14, name: 'Sunflower Charm', price: 20, cat: 'charm', img: 'products/sunflower charm.png', desc: 'Handcrafted charm' },
-      { id: 15, name: 'White Puppy Charm', price: 20, cat: 'charm', img: 'products/white puppy charm.png', desc: 'Handcrafted charm' },
+      { id: 1, name: 'Artsy Charm', price: 20, img: 'products/artsy charm.png', desc: 'Handcrafted charm' },
+      { id: 2, name: 'Black & White Charm', price: 20, img: 'products/black and white charm.png', desc: 'Handcrafted charm' },
+      { id: 3, name: 'Blue Butterfly Charm', price: 20, img: 'products/blue butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 4, name: 'Blue Flower Charm', price: 20, img: 'products/blue flower charm.png', desc: 'Handcrafted charm' },
+      { id: 5, name: 'Blue Sky Tulip Charm', price: 20, img: 'products/blue sky tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 6, name: 'Double Butterfly Charm', price: 35, img: 'products/double butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 7, name: 'Drama Queen Charm', price: 20, img: 'products/drama queen charm.png', desc: 'Handcrafted charm' },
+      { id: 8, name: 'Gold Butterfly Charm', price: 20, img: 'products/gold butterfly charm.png', desc: 'Handcrafted charm' },
+      { id: 9, name: 'Little Tulip Charm', price: 20, img: 'products/little tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 10, name: 'Pink Duck Charm', price: 20, img: 'products/pink duck charm.png', desc: 'Handcrafted charm' },
+      { id: 11, name: 'Pink Glamour Charm', price: 20, img: 'products/pink glamour charm.png', desc: 'Handcrafted charm' },
+      { id: 12, name: 'Polka Dots Charm', price: 20, img: 'products/polka dots charm.png', desc: 'Handcrafted charm' },
+      { id: 13, name: 'Silver Paw Charm', price: 20, img: 'products/silver paw charm.png', desc: 'Handcrafted charm' },
+      { id: 14, name: 'Sunflower Charm', price: 20, img: 'products/sunflower charm.png', desc: 'Handcrafted charm' },
+      { id: 15, name: 'White Puppy Charm', price: 20, img: 'products/white puppy charm.png', desc: 'Handcrafted charm' },
       // 25 dh charms
-      { id: 16, name: 'Blue Bow Charm', price: 25, cat: 'charm', img: '25/blue bow charm.png', desc: 'Handcrafted charm' },
-      { id: 17, name: 'Blue Turtle Charm', price: 25, cat: 'charm', img: '25/blue turtle charm.png', desc: 'Handcrafted charm' },
-      { id: 18, name: 'Colorful Heart Charm', price: 25, cat: 'charm', img: '25/colorful heart charm.png', desc: 'Handcrafted charm' },
-      { id: 19, name: 'Conver', price: 25, cat: 'charm', img: '25/conver.png', desc: 'Handcrafted charm' },
-      { id: 20, name: 'Fish Charm', price: 25, cat: 'charm', img: '25/fish charm.png', desc: 'Handcrafted charm' },
-      { id: 21, name: 'Long Cat Charm', price: 25, cat: 'charm', img: '25/long cat charm.png', desc: 'Handcrafted charm' },
-      { id: 22, name: 'Long Heart Charm', price: 25, cat: 'charm', img: '25/long heart charm.png', desc: 'Handcrafted charm' },
-      { id: 23, name: 'Pearl Charm', price: 25, cat: 'charm', img: '25/pearl charm.png', desc: 'Handcrafted charm' },
-      { id: 24, name: 'Rose Charm', price: 25, cat: 'charm', img: '25/rose charm.png', desc: 'Handcrafted charm' },
-      { id: 25, name: 'Sea Horse Charm', price: 25, cat: 'charm', img: '25/sea horse charm.png', desc: 'Handcrafted charm' },
-      { id: 26, name: 'Sea Star Charm', price: 25, cat: 'charm', img: '25/sea star charm.png', desc: 'Handcrafted charm' },
-      { id: 27, name: 'Shell Silver Charm', price: 25, cat: 'charm', img: '25/shell silver charm.png', desc: 'Handcrafted charm' },
-      { id: 28, name: 'Star Double Charm', price: 35, cat: 'charm', img: '25/star double charm.png', desc: 'Handcrafted charm' },
-      { id: 29, name: 'Teddy Bear Charm', price: 25, cat: 'charm', img: '25/teddy bear charm.png', desc: 'Handcrafted charm' },
-      { id: 30, name: 'Tulip Charm', price: 25, cat: 'charm', img: '25/tulip charm.png', desc: 'Handcrafted charm' },
+      { id: 16, name: 'Blue Bow Charm', price: 25, img: '25/blue bow charm.png', desc: 'Handcrafted charm' },
+      { id: 17, name: 'Blue Turtle Charm', price: 25, img: '25/blue turtle charm.png', desc: 'Handcrafted charm' },
+      { id: 18, name: 'Colorful Heart Charm', price: 25, img: '25/colorful heart charm.png', desc: 'Handcrafted charm' },
+      { id: 19, name: 'Conver', price: 25, img: '25/conver.png', desc: 'Handcrafted charm' },
+      { id: 20, name: 'Fish Charm', price: 25, img: '25/fish charm.png', desc: 'Handcrafted charm' },
+      { id: 21, name: 'Long Cat Charm', price: 25, img: '25/long cat charm.png', desc: 'Handcrafted charm' },
+      { id: 22, name: 'Long Heart Charm', price: 25, img: '25/long heart charm.png', desc: 'Handcrafted charm' },
+      { id: 23, name: 'Pearl Charm', price: 25, img: '25/pearl charm.png', desc: 'Handcrafted charm' },
+      { id: 24, name: 'Rose Charm', price: 25, img: '25/rose charm.png', desc: 'Handcrafted charm' },
+      { id: 25, name: 'Sea Horse Charm', price: 25, img: '25/sea horse charm.png', desc: 'Handcrafted charm' },
+      { id: 26, name: 'Sea Star Charm', price: 25, img: '25/sea star charm.png', desc: 'Handcrafted charm' },
+      { id: 27, name: 'Shell Silver Charm', price: 25, img: '25/shell silver charm.png', desc: 'Handcrafted charm' },
+      { id: 28, name: 'Star Double Charm', price: 35, img: '25/star double charm.png', desc: 'Handcrafted charm' },
+      { id: 29, name: 'Teddy Bear Charm', price: 25, img: '25/teddy bear charm.png', desc: 'Handcrafted charm' },
+      { id: 30, name: 'Tulip Charm', price: 25, img: '25/tulip charm.png', desc: 'Handcrafted charm' },
       // 30 dh
-      { id: 31, name: 'White Double Charm', price: 30, cat: 'charm', img: '30/white double charm.png', desc: 'Handcrafted charm' },
+      { id: 31, name: 'White Double Charm', price: 30, img: '30/white double charm.png', desc: 'Handcrafted charm' },
       // Little 20 dh
-      { id: 32, name: 'Cherry Charm', price: 20, cat: 'charm', img: 'little/cherry charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 33, name: 'Evil Eye Charm', price: 20, cat: 'charm', img: 'little/evil eye charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 34, name: 'Jelly Fish Charm', price: 20, cat: 'charm', img: 'little/jelly fish charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 35, name: 'Long Flower Charm', price: 28, cat: 'charm', img: 'little/long flower charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 36, name: 'Purple Flower Charm', price: 20, cat: 'charm', img: 'little/purple flower charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 37, name: 'Silver Blue Charm', price: 20, cat: 'charm', img: 'little/silver blue charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 38, name: 'Sun Charm', price: 20, cat: 'charm', img: 'little/sun charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 39, name: 'Sylver Charm', price: 20, cat: 'charm', img: 'little/sylver charm.jpeg', desc: 'Handcrafted charm' },
-      { id: 40, name: 'Yin Yang Charm', price: 20, cat: 'charm', img: 'little/yin yang charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 32, name: 'Cherry Charm', price: 20, img: 'little/cherry charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 33, name: 'Evil Eye Charm', price: 20, img: 'little/evil eye charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 34, name: 'Jelly Fish Charm', price: 20, img: 'little/jelly fish charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 35, name: 'Long Flower Charm', price: 28, img: 'little/long flower charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 36, name: 'Purple Flower Charm', price: 20, img: 'little/purple flower charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 37, name: 'Silver Blue Charm', price: 20, img: 'little/silver blue charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 38, name: 'Sun Charm', price: 20, img: 'little/sun charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 39, name: 'Sylver Charm', price: 20, img: 'little/sylver charm.jpeg', desc: 'Handcrafted charm' },
+      { id: 40, name: 'Yin Yang Charm', price: 20, img: 'little/yin yang charm.jpeg', desc: 'Handcrafted charm' },
       // Bracelet
-      { id: 41, name: 'Italian Bracelet', price: 75, cat: 'bracelet', img: 'bracelet/italian bracelet.jpeg', desc: 'Handcrafted bracelet' },
+      { id: 41, name: 'Italian Bracelet', price: 75, img: 'bracelet/italian bracelet.jpeg', desc: 'Handcrafted bracelet' },
+      // Montre
+      { id: 42, name: 'Gold Charm Watch', price: 120, img: 'montre/gold charm watch.png', desc: 'Handcrafted watch' },
+      { id: 43, name: 'Silver Charm Watch', price: 120, img: 'montre/silver charm watch.png', desc: 'Handcrafted watch' },
     ];
 
     let cart = [];
@@ -506,6 +509,7 @@
       `;
       grid.appendChild(card);
     });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // Cart
     const sidebar = document.getElementById('cartSidebar');
@@ -775,7 +779,6 @@
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
