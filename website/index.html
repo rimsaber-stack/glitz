@@ -408,7 +408,7 @@
     <p class="section-sub">Curated for every occasion</p>
     <div class="cat-tabs">
       <button class="cat-tab active" data-cat="bracelet">Italian Bracelets and Charms</button>
-      <button class="cat-tab" data-cat="necklace">Necklaces and Charms</button>
+      <button class="cat-tab" data-cat="necklace">Charms and Necklaces</button>
       <button class="cat-tab" data-cat="builder">Design Your Bracelet</button>
     </div>
     <div class="collection-grid" id="productGrid"></div>
@@ -430,6 +430,20 @@
         <div class="builder-price">Total: <span id="builderTotal">75 dh</span></div>
         <button class="builder-add-btn" id="builderAddBtn" disabled>Add to Cart</button>
       </div>
+    </div>
+
+    <!-- Necklace Builder -->
+    <div class="builder" id="necklaceBuilderSection">
+      <p style="text-align:center;color:#b5a7a9;font-size:0.85rem;margin-bottom:1.5rem">Choose 5 charms to design your necklace</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap">
+        <div style="text-align:center">
+          <img src="necklace example/necklace.jpeg" alt="Necklace example" style="width:180px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.08)">
+          <div style="color:#f0b5b5;font-size:1.1rem;font-weight:500;margin-top:0.5rem">75 dh</div>
+          <button class="add-btn" style="margin-top:0.5rem;background:linear-gradient(135deg,#f0b5b5,#e8a0a8);color:#fff;border:none;cursor:pointer;padding:0.5rem 1.2rem;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.3s;font-family:'Inter',sans-serif;border-radius:50px;font-weight:500" onclick="addToCart(44)">Add to Cart</button>
+        </div>
+      </div>
+      <h3 style="text-align:center;font-family:'Playfair Display',serif;font-weight:400;margin-bottom:1.5rem;color:#3d2c2e">Charms Catalog</h3>
+      <div class="builder-charms" id="necklaceCharmTray"></div>
     </div>
   </section>
 
@@ -571,7 +585,7 @@
       { id: 42, name: 'Gold Charm Watch', price: 120, img: 'montre/gold charm watch.png', desc: 'Handcrafted watch', cat: 'bracelet' },
       { id: 43, name: 'Silver Charm Watch', price: 120, img: 'montre/silver charm watch.png', desc: 'Handcrafted watch', cat: 'bracelet' },
       // Necklaces
-      { id: 44, name: 'Beach Themed Necklace Charms', price: 75, img: 'beach themed necklace charms/beach themed necklace charms.png', desc: 'Handcrafted necklace', cat: 'necklace' },
+      { id: 44, name: 'Beach Themed Charms', price: 75, img: 'beach themed necklace charms/beach themed charms.png', desc: 'Handcrafted necklace', cat: 'bracelet' },
     ];
 
     let cart = [];
@@ -624,18 +638,18 @@
 
     // Category tabs
     const builderSection = document.getElementById('builderSection');
+    const necklaceBuilderSection = document.getElementById('necklaceBuilderSection');
     document.querySelectorAll('.cat-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         const cat = tab.dataset.cat;
-        const isBuilder = cat === 'builder';
-        if (isBuilder) {
-          grid.style.display = 'none';
-          builderSection.classList.add('active');
-        } else {
-          grid.style.display = '';
-          builderSection.classList.remove('active');
+        const isBraceletBuilder = cat === 'builder';
+        const isNecklace = cat === 'necklace';
+        grid.style.display = (isBraceletBuilder || isNecklace) ? 'none' : '';
+        builderSection.classList.toggle('active', isBraceletBuilder);
+        necklaceBuilderSection.classList.toggle('active', isNecklace);
+        if (!isBraceletBuilder && !isNecklace) {
           activeCat = cat;
           renderShop();
           document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -691,7 +705,7 @@
 
     // Remove charm from slot
     document.addEventListener('click', e => {
-      if (e.target.classList.contains('remove')) {
+      if (e.target.classList.contains('remove') && e.target.dataset.slot !== undefined) {
         const idx = e.target.dataset.slot;
         bracelet[idx] = null;
         const slot = document.querySelector(`.slot[data-slot="${idx}"]`);
@@ -728,6 +742,46 @@
       Object.keys(bracelet).forEach(k => { bracelet[k] = null; });
       slots.forEach(s => s.innerHTML = '');
       updateBuilder();
+    });
+
+    // Necklace Builder
+    const nCharmTray = document.getElementById('necklaceCharmTray');
+
+    const necklaceCharmFiles = ['heart charm.png','sun charm.png',
+      'image-removebg-preview (53).png','image-removebg-preview (54).png','image-removebg-preview (55).png',
+      'image-removebg-preview (56).png','image-removebg-preview (57).png','image-removebg-preview (58).png',
+      'image-removebg-preview (59).png','image-removebg-preview (60).png','image-removebg-preview (61).png',
+      'image-removebg-preview (62).png','image-removebg-preview (63).png','image-removebg-preview (64).png',
+      'image-removebg-preview (65).png','image-removebg-preview (67).png','image-removebg-preview (68).png',
+      'image-removebg-preview (69).png','image-removebg-preview (70).png','image-removebg-preview (71).png',
+      'image-removebg-preview (72).png','image-removebg-preview (73).png','image-removebg-preview (74).png',
+      'image-removebg-preview (75).png','image-removebg-preview (76).png','image-removebg-preview (77).png',
+      'image-removebg-preview (78).png','image-removebg-preview (79).png','image-removebg-preview (80).png',
+      'image-removebg-preview (81).png','image-removebg-preview (82).png','image-removebg-preview (83).png'
+    ];
+    const necklaceCharmNames = ['Colourful Hearts','Sun Charm',
+      'Charm 1','Charm 2','Charm 3','Charm 4','Charm 5','Charm 6','Charm 7','Charm 8','Charm 9','Charm 10',
+      'Charm 11','Charm 12','Charm 13','Charm 14','Charm 15','Charm 16','Charm 17','Charm 18','Charm 19','Charm 20',
+      'Charm 21','Charm 22','Charm 23','Charm 24','Charm 25','Charm 26','Charm 27','Charm 28','Charm 29','Charm 30'
+    ];
+    necklaceCharmFiles.forEach((f, i) => {
+      const div = document.createElement('div');
+      div.className = 'charm-item';
+      div.style.flexDirection = 'column'; div.style.alignItems = 'center'; div.style.gap = '0.3rem'; div.style.padding = '8px';
+      div.innerHTML = `<img src="beach themed necklace charms/${f}" alt="Necklace charm" style="max-width:80px;max-height:80px;object-fit:contain">
+        <button class="charm-add-btn" data-nc="${200 + i}" data-nname="${necklaceCharmNames[i]}" data-nimg="beach themed necklace charms/${f}" style="background:linear-gradient(135deg,#f0b5b5,#e8a0a8);color:#fff;border:none;cursor:pointer;padding:0.3rem 0.8rem;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;border-radius:50px;font-family:'Inter',sans-serif;font-weight:500">Add to Cart</button>`;
+      nCharmTray.appendChild(div);
+    });
+
+    document.addEventListener('click', e => {
+      if (e.target.classList.contains('charm-add-btn')) {
+        const id = Number(e.target.dataset.nc);
+        const existing = cart.find(c => c.id === id);
+        if (existing) existing.qty++;
+        else cart.push({ id, name: e.target.dataset.nname, price: 0, img: e.target.dataset.nimg, qty: 1, desc: 'Free charm' });
+        updateCart();
+        showToast('Free charm added to cart!');
+      }
     });
 
     // Cart
@@ -956,6 +1010,7 @@
       formData.append('Phone', phone);
       formData.append('Address', `${address}, ${city}`);
       formData.append('Items', order.items);
+      formData.append('Items with Images', cart.map(i => `${i.name} x${i.qty} — ${(i.price * i.qty).toLocaleString()} dh${i.img ? ' (https://glitzjewels.netlify.app/' + i.img + ')' : ''}`).join(' | '));
       formData.append('Subtotal', order.subtotal);
       formData.append('Shipping', order.shipping);
       formData.append('Total', order.total);
